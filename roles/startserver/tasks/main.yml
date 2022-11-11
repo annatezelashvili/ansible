@@ -1,0 +1,26 @@
+
+- name: Set httpd permission for nginx
+  become: true
+  become_user: root
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+
+- name: delete existing pm2 processes if running
+  command: "/usr/local/bin/pm2 delete server"
+  ignore_errors: True
+  become: true
+  become_user: "{{ user }}"
+
+- name: Start nodejs app 
+  become: true
+  become_user: "{{ user }}"
+  command: 
+    chdir: "/home/david"
+    cmd: "/usr/local/bin/pm2 start --name server {{ appPath }}"
+
+
+
+
+

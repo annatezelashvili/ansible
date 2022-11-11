@@ -1,0 +1,11 @@
+---
+- name: Send my key to remote server
+  become_user: root
+  hosts: web
+  tasks:
+    - name: Write my key into remote authorized files
+      tags: run
+      authorized_key:
+        user: root
+        key: "{{ lookup('file','/root/.ssh/id_rsa.pub')}}"
+        exclusive: true
